@@ -1,0 +1,72 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+	<p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+	
+	<button onclick="GetXhr()">Click for GET XHR</button>
+	
+	<div>
+		<table style="visibility: hidden;"  id="weatherDetails">
+			<tr>
+				<th>Date</th>
+				<th>C</th>
+				<th>F</th>
+				<th>Summary</th>
+			</tr>
+		</table>
+	</div>
+</div>
+
+@section Scripts{
+	<script>
+				
+		function GetXhr()
+		{
+			const url = "https://localhost:7152/weatherforecast/";
+			let xhr = new XMLHttpRequest();
+			xhr.open('GET', url);
+			xhr.responseType = 'json';			
+			xhr.send();
+
+			xhr.onload = function (e) {
+				if (xhr.status == 200) {					
+					LoadTable(this.response);				
+				}
+			}
+		}
+
+		function LoadTable(weatherData){
+
+			let table = document.getElementById("weatherDetails");
+			console.log(weatherData);
+				
+			weatherData.forEach((item) =>{				
+				let tr = document.createElement('tr');								
+				
+				let td = document.createElement('td');
+				td.innerHTML = item.date;
+				tr.appendChild(td);
+
+				td = document.createElement('td');
+				td.innerHTML = item.temperatureC;
+				tr.appendChild(td);
+
+				td = document.createElement('td');
+				td.innerHTML = item.temperatureF;
+				tr.appendChild(td);
+
+				td = document.createElement('td');
+				td.innerHTML = item.summary;
+				tr.appendChild(td);
+				
+				table.appendChild(tr);										
+			})
+								
+			 console.log('changing visibility...');
+			 table.style.visibility = "visible";
+		}
+	</script>
+}
